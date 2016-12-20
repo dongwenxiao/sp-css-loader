@@ -69,8 +69,8 @@
 /***/ function(module, exports) {
 
 module.exports = {
-        wapper: 'e7489',
-        css: '"\n.e7489 .component {\n    -webkit-transform: translate(11px,111px);\n            transform: translate(11px,111px);\n    border: 1px solid;\n}\n\n.e7489 .fs-ad .pic {\n    width: 540px;\n    margin: -180px 0 0 -270px;\n}\n\n@media (max-width: 768px) {\n    .e7489 .whatscall-video, .e7489 .whatscall-vdmask {\n        display:none!important;\n    }\n}\n@-webkit-keyframes showCrumbs {\n    .e7489 from {\n        opacity: 0;\n        -webkit-transform: scale(0.4,0.4);\n                transform: scale(0.4,0.4);\n    }\n\n    .e7489 to {\n        opacity: 1;\n        -webkit-transform: scale(1,1);\n                transform: scale(1,1);\n    }\n}\n@keyframes showCrumbs {\n    from {\n        opacity: 0;\n        -webkit-transform: scale(0.4,0.4);\n                transform: scale(0.4,0.4);\n    }\n\n    to {\n        opacity: 1;\n        -webkit-transform: scale(1,1);\n                transform: scale(1,1);\n    }\n}"'
+        wapper: '6e128',
+        css: '"\n.6e128 blockquote:before, .6e128 blockquote:after, .6e128 q:before, .6e128 q:after {\n\tcontent: \"\";\n\tcontent: none;\n}\n.6e128 table {\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}"'
     }
 
 /***/ },
