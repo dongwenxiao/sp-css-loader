@@ -7,6 +7,19 @@
     loader: 'wapper-css-loader?length=4!postcss-loader'
 }
 ```
+处理结果
+```
+// 导入样式
+import css from './style.css'
+
+/*
+css 值如下
+{
+    wapper: '9033df94d33a368c3b73',
+    css: '.9033df94d33a368c3b73 .component { color: blue }'
+}
+*/
+```
 
 ## 例子说明
 

@@ -1,6 +1,6 @@
 {
   "name": "wapper-css-loader",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "webpack loader for react component wapper css class",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,7 @@
   "devDependencies": {
     "css-loader": "^0.26.1",
     "postcss-loader": "^1.2.1",
+    "wapper-css-loader": "^1.0.2",
     "webpack": "2.1.0-beta.27"
   }
 }
