@@ -1,0 +1,27 @@
+
+.component {
+    transform: translate(11px,111px);
+    border: 1px solid;
+}
+
+.fs-ad .pic {
+    width: 540px;
+    margin: -180px 0 0 -270px;
+}
+
+@media (max-width: 768px) {
+    .whatscall-video, .whatscall-vdmask {
+        display:none!important;
+    }
+}
+@keyframes showCrumbs {
+    from {
+        opacity: 0;
+        transform: scale(0.4,0.4);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1,1);
+    }
+}

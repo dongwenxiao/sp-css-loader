@@ -1,0 +1,33 @@
+{
+  "name": "wapper-css-loader",
+  "version": "1.0.2",
+  "description": "webpack loader for react component wapper css class",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack --config ./example/webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dongwenxiao/wapper-css-loader.git"
+  },
+  "keywords": [
+    "webpack",
+    "loader"
+  ],
+  "author": "cs_victor@126.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dongwenxiao/wapper-css-loader/issues"
+  },
+  "homepage": "https://github.com/dongwenxiao/wapper-css-loader",
+  "dependencies": {
+    "md5": "^2.2.1",
+    "postcss": "^5.2.6"
+  },
+  "devDependencies": {
+    "css-loader": "^0.26.1",
+    "postcss-loader": "^1.2.1",
+    "webpack": "2.1.0-beta.27"
+  }
+}
