@@ -63,6 +63,8 @@ wapper-css-loader?wapper=false // 外面不用包装，适用于全局样式
 
 ## 注意
 
-length 必须大于1
-在css文件中不能使用 ```@import```  [在postcss中加入postcss-import插件可以支持]
-css文本处理时候会自动把单引号处理成双引号``` '' -> "" ```
+* length 必须大于1
+* 在css文件中不能使用 ```@import```  [在postcss中加入postcss-import插件可以支持]
+* css文本处理时候会自动把单引号处理成双引号``` '' -> "" ```
+
+
