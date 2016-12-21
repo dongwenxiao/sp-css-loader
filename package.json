@@ -1,6 +1,6 @@
 {
   "name": "wapper-css-loader",
-  "version": "1.0.5",
+  "version": "1.0.11",
   "description": "webpack loader for react component wapper css class",
   "main": "index.js",
   "scripts": {

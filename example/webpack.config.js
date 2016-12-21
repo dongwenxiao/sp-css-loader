@@ -16,7 +16,11 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                loader: 'wapper-css-loader!postcss-loader'
+                loader: 'wapper-css-loader?length=3&wapper!postcss-loader'
+            },
+            {
+                test: /\.gcss$/,
+                loader: 'wapper-css-loader?length=3&wapper=false!postcss-loader'
             }
         ]
     },
