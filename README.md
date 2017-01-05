@@ -1,10 +1,10 @@
-# wapper-css-loader
+# wrapper-css-loader
 把css内容加载对象并且用md5值做为外壳包装原有全部class，一般和postcss配合使用。
 如:
 ```
 {
     test: /\.css$/,
-    loader: 'wapper-css-loader?length=4!postcss-loader'
+    loader: 'wrapper-css-loader?length=4!postcss-loader'
 }
 ```
 处理结果
@@ -15,7 +15,7 @@ import css from './style.css'
 /*
 css 值如下
 {
-    wapper: '9033df94d33a368c3b73',
+    wrapper: '9033df94d33a368c3b73',
     css: '.9033df94d33a368c3b73 .component { color: blue }'
 }
 */
@@ -40,16 +40,16 @@ css 值如下
 ### length
 
 ```
-wapper-css-loader?length=4
+wrapper-css-loader?length=4
 ```
 > length 设置包装class名字的长度，
 > 结果是 ```.9033 .component```
 
-### wapper
+### wrapper
 
 ```
-wapper-css-loader?wapper=true // 外面用class包装，适用于组件样式
-wapper-css-loader?wapper=false // 外面不用包装，适用于全局样式
+wrapper-css-loader?wrapper=true // 外面用class包装，适用于组件样式
+wrapper-css-loader?wrapper=false // 外面不用包装，适用于全局样式
 
 ```
 
@@ -57,7 +57,7 @@ wapper-css-loader?wapper=false // 外面不用包装，适用于全局样式
 // 可以这样处理全局样式，把css扩展名特殊化，例如: .css -> .gcss 
 {
     test: /\.gcss$/,
-    loader: 'wapper-css-loader?length=3&wapper=false!postcss-loader'
+    loader: 'wrapper-css-loader?length=3&wrapper=false!postcss-loader'
 }
 ```
 

@@ -18,7 +18,7 @@ module.exports = function (content) {
     // none 是什么都不做，md5仍然做  .page => .page
     var mode = query.mode
 
-    // md5 字符串wapper的class名长度
+    // md5 字符串wrapper的class名长度
     var length = query.length || 5
     
     var md5Name = md5(content)
@@ -49,7 +49,7 @@ module.exports = function (content) {
 
             // 每个class外面加1层class
             rule.selectors = rule.selectors.map(selector => {
-                // 如果是全局css，则不做wapper处理
+                // 如果是全局css，则不做wrapper处理
                 return `.${md5Name} ${selector}`
             })
         })
@@ -57,12 +57,12 @@ module.exports = function (content) {
         // 导出md5的class名字和处理后的css文本
         // 把单引号统一处理成双引号 "" -> ''
         return `module.exports = {
-            wapper: '${md5Name}',
+            wrapper: '${md5Name}',
             css: '${JSON.stringify(root.toString())}'
         }`
     } else if(mode === 'none') {
         return `module.exports = {
-            wapper: '${md5Name}',
+            wrapper: '${md5Name}',
             css: '${JSON.stringify(content)}'
         }`
     } else if (mode === 'replace') {
@@ -84,7 +84,7 @@ module.exports = function (content) {
         // 导出md5的class名字和处理后的css文本
         // 把单引号统一处理成双引号 "" -> ''
         return `module.exports = {
-            wapper: '${md5Name}',
+            wrapper: '${md5Name}',
             css: '${JSON.stringify(root.toString())}'
         }`
     } else {
