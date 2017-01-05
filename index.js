@@ -12,14 +12,15 @@ module.exports = function (content) {
     // 默认5个字符
     var query = loaderUtils.parseQuery(this.query)
 
-    // 是否做wapper处理(全局css不做wapper处理)
-    query.wapper === undefined && (query.wapper = true)
-    var isWapper = query.wapper
+    // replace|wrapper|none
+    // replace 是否把样式替换md5值，替换 .page => .c2d3
+    // wrapper 是把样式外包一层， .page => .c2d3 .page
+    // none 是什么都不做，md5仍然做  .page => .page
+    var mode = query.mode
 
     // md5 字符串wapper的class名长度
     var length = query.length || 5
     
-
     var md5Name = md5(content)
 
     // 强制第一位是字母
@@ -36,7 +37,7 @@ module.exports = function (content) {
     // chars = chars.split(',').concat(chars.toUpperCase().split(','))
     // var firstChat = chars[Math.floor(Math.random() * chars.length)]
 
-    if(isWapper) {
+    if(mode === 'wrapper') {
         
         // postcss 处理每一个class名字
         var root = postcss.parse(content)
@@ -59,10 +60,34 @@ module.exports = function (content) {
             wapper: '${md5Name}',
             css: '${JSON.stringify(root.toString())}'
         }`
-    } else {
+    } else if(mode === 'none') {
         return `module.exports = {
             wapper: '${md5Name}',
             css: '${JSON.stringify(content)}'
         }`
-    }   
+    } else if (mode === 'replace') {
+        // postcss 处理每一个class名字
+        var root = postcss.parse(content)
+        root.walkRules((rule, i) => {
+
+            // 排除@keyframe
+            if (rule.parent.type == 'atrule' && rule.parent.name == 'keyframes')
+                return
+
+            // 每个class外面加1层class
+            rule.selectors = rule.selectors.map(selector => {
+                // 每个组件默认有1个.component表示当前组件，用md5值替换他
+                return selector.replace(/.component/g, '.' + md5Name)
+            })
+        })
+
+        // 导出md5的class名字和处理后的css文本
+        // 把单引号统一处理成双引号 "" -> ''
+        return `module.exports = {
+            wapper: '${md5Name}',
+            css: '${JSON.stringify(root.toString())}'
+        }`
+    } else {
+
+    }
 }
