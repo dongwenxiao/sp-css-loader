@@ -77,7 +77,12 @@ module.exports = function (content) {
             // 每个class外面加1层class
             rule.selectors = rule.selectors.map(selector => {
                 // 每个组件默认有1个.component表示当前组件，用md5值替换他
-                return selector.replace(/.component/g, '.' + md5Name)
+                if(selector.indexOf('.component') > -1){
+                    return selector.replace(/.component/g, '.' + md5Name)
+                } else {
+                    return `.${md5Name} ${selector}`
+                }
+                
             })
         })
 
