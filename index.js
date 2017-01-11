@@ -101,7 +101,7 @@ module.exports = function (content) {
             css: '${root.toString()}'
         }`
 
-        result = result.replace(/\n\r/g, '').replace(/\n/g, '')
+        result = result.replace(/\r\n/gi, '').replace(/\n/gi,'')
         return result
     } else {
 
