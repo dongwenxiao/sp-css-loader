@@ -7,7 +7,7 @@ module.exports = function (content) {
     this.cacheable && this.cacheable()
 
     content = content.replace(/\'/g, '\"')
-    
+
     // md5后，class名字长度
     // 默认5个字符
     var query = loaderUtils.parseQuery(this.query)
@@ -20,12 +20,12 @@ module.exports = function (content) {
 
     // md5 字符串wrapper的class名长度
     var length = query.length || 5
-    
+
     var md5Name = md5(content)
 
     // 强制第一位是字母
     var firstChat = md5Name.match(/[a-zA-Z]{1}/)[0]
-    
+
     // md5 后去掉length-1个字符
     var otherChats = md5Name.substr(0, length - 1)
 
@@ -37,8 +37,8 @@ module.exports = function (content) {
     // chars = chars.split(',').concat(chars.toUpperCase().split(','))
     // var firstChat = chars[Math.floor(Math.random() * chars.length)]
 
-    if(mode === 'wrapper') {
-        
+    if (mode === 'wrapper') {
+
         // postcss 处理每一个class名字
         var root = postcss.parse(content)
         root.walkRules((rule, i) => {
@@ -54,16 +54,22 @@ module.exports = function (content) {
             })
         })
 
+        handleBackground(root)
+
         // 导出md5的class名字和处理后的css文本
         // 把单引号统一处理成双引号 "" -> ''
         return `module.exports = {
             wrapper: '${md5Name}',
             css: '${JSON.stringify(root.toString())}'
         }`
-    } else if(mode === 'none') {
+    } else if (mode === 'none') {
+
+        var root = postcss.parse(content)
+        handleBackground(root)
+
         return `module.exports = {
             wrapper: '${md5Name}',
-            css: '${JSON.stringify(content)}'
+            css: '${JSON.stringify(root.toString())}'
         }`
     } else if (mode === 'replace') {
         // postcss 处理每一个class名字
@@ -77,22 +83,52 @@ module.exports = function (content) {
             // 每个class外面加1层class
             rule.selectors = rule.selectors.map(selector => {
                 // 每个组件默认有1个.component表示当前组件，用md5值替换他
-                if(selector.indexOf('.component') > -1){
+                if (selector.indexOf('.component') > -1) {
                     return selector.replace(/.component/g, '.' + md5Name)
                 } else {
                     return `.${md5Name} ${selector}`
                 }
-                
+
             })
         })
 
+        handleBackground(root)
+
         // 导出md5的class名字和处理后的css文本
         // 把单引号统一处理成双引号 "" -> ''
-        return `module.exports = {
+        let result = `module.exports = {
             wrapper: '${md5Name}',
-            css: '${JSON.stringify(root.toString())}'
+            css: '${root.toString()}'
         }`
+
+        result = result.replace(/\n\r/g, '').replace(/\n/g, '')
+        return result
     } else {
 
     }
+}
+
+function handleBackground(root) {
+
+    // 处理背景图片
+    root.walkDecls(/^background/, decl => {
+
+        // 匹配到background中的url()
+        var matches = decl.value.match(/url\((.*?)\)/)
+
+        if (matches && matches.length > 1) {
+            var v = matches[1]
+
+            decl.value = decl.value.replace(v, (m) => {
+
+                // 双引号变单引号
+                m = m.replace(/\"/g, '\'')
+                if (m.indexOf('\'') < 0) {
+                    m = `\'${m}\'`
+                }
+
+                return "' +  require(" + m + ") + '"
+            })
+        }
+    })
 }

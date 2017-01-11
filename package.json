@@ -1,6 +1,6 @@
 {
   "name": "wrapper-css-loader",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "webpack loader for react component wrapper css class",
   "main": "index.js",
   "scripts": {
