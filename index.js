@@ -2,7 +2,11 @@ var postcss = require('postcss')
 var loaderUtils = require("loader-utils")
 var md5 = require('md5')
 
-module.exports = function (content) {
+var collection = []
+var sameIndex = 0
+
+module.exports = function(content) {
+
 
     this.cacheable && this.cacheable()
 
@@ -32,11 +36,18 @@ module.exports = function (content) {
     // 以字符开通的class名
     md5Name = firstChat + otherChats
 
-    // 强制第一位是字母
-    // var chars = 'a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z'
-    // chars = chars.split(',').concat(chars.toUpperCase().split(','))
-    // var firstChat = chars[Math.floor(Math.random() * chars.length)]
+    // 去重
+    var flag = true
+    while (flag) {
+        flag = !!~collection.indexOf(md5Name)
+        if (flag) {
+            md5Name += (sameIndex + '')
+            sameIndex++
+        }
+    }
+    collection.push(md5Name)
 
+    //
     if (mode === 'wrapper') {
 
         // postcss 处理每一个class名字
@@ -101,7 +112,7 @@ module.exports = function (content) {
             css: '${root.toString()}'
         }`
 
-        result = result.replace(/\r\n/gi, '').replace(/\n/gi,'')
+        result = result.replace(/\r\n/gi, '').replace(/\n/gi, '')
         return result
     } else {
 
