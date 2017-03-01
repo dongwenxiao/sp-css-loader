@@ -112,7 +112,11 @@ module.exports = function(content) {
             css: '${root.toString()}'
         }`
 
-        result = result.replace(/\r\n/gi, '').replace(/\n/gi, '')
+        // result = result.replace(/\r\n/gi, '').replace(/\n/gi, '')
+        result = result
+            .replace(/(\r\n)|(\n)|(\/\*[\S\s]+?\*\/)|(\/\/)|(\s*;\s*(})\s*)|(\s*([{},;:])\s*)/gi, '$6$8')
+            .replace(/\s{2,}/gi, ' ')
+
         return result
     } else {
 
