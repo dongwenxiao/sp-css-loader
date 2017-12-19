@@ -45,7 +45,8 @@ module.exports = function(content) {
             sameIndex++
         }
     }
-    collection.push(md5Name)
+
+    var customName = ''
 
     //
     if (mode === 'wrapper') {
@@ -58,11 +59,22 @@ module.exports = function(content) {
             if (rule.parent.type == 'atrule' && rule.parent.name == 'keyframes')
                 return
 
-            // 每个class外面加1层class
-            rule.selectors = rule.selectors.map(selector => {
-                // 如果是全局css，则不做wrapper处理
-                return `.${md5Name} ${selector}`
-            })
+            /* 这段代码未测试，后续如果用，可开启并测试一下 */
+            // // 每个class外面加1层class
+            // rule.selectors = rule.selectors.map(selector => {
+
+            //     // 自定义class名，eg：  .component:custom{} =>  .custom_f22fs{}
+            //     if (~selector.indexOf('.component:')) {
+            //         // 获取自定义名
+            //         customName = selector.split(':')[1] 
+            //         md5Name = customName + '_' + md5Name
+            //         // 恢复成.component
+            //         selector = '.component'
+            //     }
+
+            //     // 如果是全局css，则不做wrapper处理
+            //     return `.${md5Name} ${selector}`
+            // })
         })
 
         handleBackground(root)
@@ -93,8 +105,19 @@ module.exports = function(content) {
 
             // 每个class外面加1层class
             rule.selectors = rule.selectors.map(selector => {
+
+                // 自定义class名，eg：  .component:custom{} =>  .custom_f22fs{}
+                if (~selector.indexOf('.component:')) {
+                    // 获取自定义名
+                    customName = selector.split(':')[1] 
+                    md5Name = customName + '_' + md5Name
+                    // 恢复成.component
+                    selector = '.component'
+                }
+
+
                 // 每个组件默认有1个.component表示当前组件，用md5值替换他
-                if (selector.indexOf('.component') > -1) {
+                if (~selector.indexOf('.component')) {
                     return selector.replace(/.component/g, '.' + md5Name)
                 } else {
                     return `.${md5Name} ${selector}`
@@ -121,6 +144,8 @@ module.exports = function(content) {
     } else {
 
     }
+
+    collection.push(md5Name)
 }
 
 function handleBackground(root) {
