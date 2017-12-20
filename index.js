@@ -97,6 +97,7 @@ module.exports = function(content) {
     } else if (mode === 'replace') {
         // postcss 处理每一个class名字
         var root = postcss.parse(content)
+        var once = true // 处理名字只处理1次
         root.walkRules((rule, i) => {
 
             // 排除@keyframe
@@ -105,15 +106,34 @@ module.exports = function(content) {
 
             // 每个class外面加1层class
             rule.selectors = rule.selectors.map(selector => {
-
+                console.log('every=====》:' , selector)
                 // 自定义class名，eg：  .component:custom{} =>  .custom_f22fs{}
+
                 if (~selector.indexOf('.component:')) {
                     // 获取自定义名
-                    customName = selector.split(':')[1] 
-                    md5Name = customName + '_' + md5Name
-                    // 恢复成.component
-                    selector = '.component'
+                    
+                    if (once) {
+                        customName = selector.split(':')[1]
+                        md5Name = customName + '_' + md5Name
+
+                        // 恢复成.component
+                        selector = '.component'
+
+                        once = false
+
+                        console.log('once:' , selector)
+                    } else {
+                        console.log('more-b:' , selector)
+                        console.log('more-c:' , ':' + customName)
+
+                        selector = selector.replace(':' + customName, '')
+                        console.log('more:' , selector)
+                    }
                 }
+
+                
+
+
 
 
                 // 每个组件默认有1个.component表示当前组件，用md5值替换他
