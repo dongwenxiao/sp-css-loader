@@ -25,6 +25,12 @@ module.exports = function(content) {
     // md5 字符串wrapper的class名长度
     var length = query.length || 5
 
+    // class名字自定义规则
+    // TODO: 目前只支持1个规则: .component__[name]__ 其他规则用到的时候再扩展
+    // .component => .af2e
+    // .component__header__ => .header_af2e
+    var pattern = query.pattern || '.component__[name]__'
+
     var md5Name = md5(content)
 
     // 强制第一位是字母
@@ -109,26 +115,26 @@ module.exports = function(content) {
 
                 // 自定义class名，eg：  .component:custom{} =>  .custom_f22fs{}
 
-                if (~selector.indexOf('.component:')) {
+                // console.log('every=====>', selector)
+                if (~selector.indexOf('.component__')) {
                     // 获取自定义名
 
+                    // .component  匿名
+                    // .component__[name]__  自定义+匿名
+
                     if (once) {
-                        customName = selector.split(':')[1]
+                        customName = selector.split('__')[1]
                         md5Name = customName + '_' + md5Name
 
                         // 恢复成.component
-                        selector = '.component'
-
                         once = false
-
-                    } else {
-                        selector = selector.replace(':' + customName, '')
+                        // console.log('once')
+                    }else{
+                        // console.log('other')
                     }
+                    selector = selector.replace(`__${customName}__`, '')
+                    // console.log(selector)
                 }
-
-
-
-
 
 
                 // 每个组件默认有1个.component表示当前组件，用md5值替换他
