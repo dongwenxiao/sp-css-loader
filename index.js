@@ -172,7 +172,7 @@ module.exports = function(content) {
 function handleBackground(root) {
 
     // 处理背景图片
-    root.walkDecls(/^background/, decl => {
+    root.walkDecls(/^(background|border)/, decl => {
 
         // 匹配到background中的url()
         var matches = decl.value.match(/url\((.*?)\)/)
