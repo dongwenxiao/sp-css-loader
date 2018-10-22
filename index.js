@@ -22,6 +22,11 @@ module.exports = function(content) {
     // none 是什么都不做，md5仍然做  .page => .page
     var mode = query.mode
 
+    // 是否可读
+    // true => .name_d3ef
+    // false=> .d3ef
+    var readable = query.readable
+
     // md5 字符串wrapper的class名长度
     var length = query.length || 5
 
@@ -32,6 +37,7 @@ module.exports = function(content) {
     var pattern = query.pattern || '.component__[name]__'
 
     var md5Name = md5(content)
+    var customNameMd5 = ''
 
     // 强制第一位是字母
     var firstChat = md5Name.match(/[a-zA-Z]{1}/)[0]
@@ -56,6 +62,7 @@ module.exports = function(content) {
 
     //
     if (mode === 'wrapper') {
+        console.log('======================>  1')
 
         // postcss 处理每一个class名字
         var root = postcss.parse(content)
@@ -93,6 +100,8 @@ module.exports = function(content) {
         }`
     } else if (mode === 'none') {
 
+        console.log('======================>  2')
+
         var root = postcss.parse(content)
         handleBackground(root)
 
@@ -101,10 +110,14 @@ module.exports = function(content) {
             css: '${JSON.stringify(root.toString())}'
         }`
     } else if (mode === 'replace') {
-        // postcss 处理每一个class名字
+
+        console.log('======================>  3')
+            // postcss 处理每一个class名字
         var root = postcss.parse(content)
         var once = true // 处理名字只处理1次
         root.walkRules((rule, i) => {
+
+            // console.log(rule.selectors)
 
             // 排除@keyframe
             if (rule.parent.type == 'atrule' && rule.parent.name == 'keyframes')
@@ -116,29 +129,55 @@ module.exports = function(content) {
                 // 自定义class名，eg：  .component:custom{} =>  .custom_f22fs{}
 
                 // console.log('every=====>', selector)
-                if (~selector.indexOf('.component__')) {
+                if (~selector.indexOf('__component')) {
+
+                    console.log('-=-=-=-=-=-=-=-=-=-=-')
+                    console.log(selector)
+
                     // 获取自定义名
 
                     // .component  匿名
-                    // .component__[name]__  自定义+匿名
+                    // .[name]__component  自定义+匿名
 
-                    if (once) {
-                        customName = selector.split('__')[1]
-                        md5Name = customName + '_' + md5Name
+                    // if (once) {
+                    //     customName = selector.split('__')[1]
+                    //     md5Name = customName + '_' + md5Name
 
-                        // 恢复成.component
-                        once = false
-                        // console.log('once')
-                    }else{
-                        // console.log('other')
-                    }
-                    selector = selector.replace(`__${customName}__`, '')
-                    // console.log(selector)
+                    //     // 恢复成.component
+                    //     once = false
+                    //     // console.log('once')
+                    // }else{
+                    //     // console.log('other')
+                    // }
+
+                    let name = selector.match(/.[a-z]+__component/)[0]
+                    // 去下划线前部分
+                    customName = name.split('__')[0]
+                    // 去掉第一个点
+                    if(customName.charAt(0) == '.') customName = customName.replace('.', '')
+                    // 可读class名拼接md5字符串
+                    customNameMd5 = customName + '_' + md5Name
+                    let patten = new RegExp(name,'g')
+                    let result = selector.replace(patten, '.'+customNameMd5)
+
+
+                    // console.log('selector:'+selector)
+                    // console.log('md5Name:'+md5Name)
+                    // console.log('customName:'+customName)
+                    // console.log('customNameMd5:'+customNameMd5)
+                    // console.log('patten:'+patten)
+                    // console.log('result:'+result)
+
+                    return result
+
+
+                    // selector = selector.replace(`__${customName}`, '')
+                        // console.log(selector)
                 }
 
 
                 // 每个组件默认有1个.component表示当前组件，用md5值替换他
-                if (~selector.indexOf('.component')) {
+                else if (~selector.indexOf('.component')) {
                     return selector.replace(/.component/g, '.' + md5Name)
                 } else {
                     return `.${md5Name} ${selector}`
@@ -151,8 +190,10 @@ module.exports = function(content) {
 
         // 导出md5的class名字和处理后的css文本
         // 把单引号统一处理成双引号 "" -> ''
+
+        let fileId = customNameMd5 || md5Name
         let result = `module.exports = {
-            wrapper: '${md5Name}',
+            wrapper: '${fileId}',
             css: '${root.toString()}'
         }`
 
