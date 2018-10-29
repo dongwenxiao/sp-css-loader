@@ -59,6 +59,8 @@ module.exports = function(content) {
 
     let customName = ''
 
+    collection.push(md5Name)
+
     //
     if (mode === 'wrapper') {
         // 暂无实现
@@ -141,8 +143,6 @@ module.exports = function(content) {
     } else {
         // 暂无实现
     }
-
-    collection.push(md5Name)
 }
 
 function handleBackground(root) {
