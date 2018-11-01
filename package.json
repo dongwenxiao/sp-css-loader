@@ -1,6 +1,6 @@
 {
   "name": "sp-css-loader",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "webpack loader for react component wrapper css class",
   "main": "index.js",
   "scripts": {
