@@ -86,7 +86,7 @@ module.exports = function(content) {
                 if (~selector.indexOf('__component')) {
 
                     // 可读性处理
-                    let readablePatten = new RegExp('.[a-zA-Z0-9]+__component')
+                    let readablePatten = new RegExp('\.[^ ^+^~^>]+?__component')
                     if (readable) {
                         let name = selector.match(readablePatten)[0]
 
